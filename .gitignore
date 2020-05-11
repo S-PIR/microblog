@@ -1,0 +1,15 @@
+# Игнорирование по типу файла, будут игнорироваться в АБСОЛЮТНО всех директориях
+# Например /files/data.project, /server.project, /uploads/users/data/info.project
+*.project
+*.classpath
+*.iml
+*.settings
+
+
+# Игнорирование папок (файлов) с именем, содержащим спецсимволы
+# Игнорирование всех файлов и папок в ЛЮБЫХ директориях с указанным именем
+# Например /.idea/user.jpg, /core/.idea/user.jpg
+\.idea/
+bin/
+target/
+
