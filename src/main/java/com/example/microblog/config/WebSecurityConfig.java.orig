@@ -1,5 +1,16 @@
 package com.example.microblog.config;
 
+<<<<<<< HEAD
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+=======
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -9,19 +20,27 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 
 import javax.sql.DataSource;
+>>>>>>> 04c35d2e6fe6d1d222c5d55a2d02bb225d3d7e60
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+<<<<<<< HEAD
+=======
     @Autowired
     private DataSource dataSource;
 
+>>>>>>> 04c35d2e6fe6d1d222c5d55a2d02bb225d3d7e60
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
                 .authorizeRequests()
+<<<<<<< HEAD
+                    .antMatchers("/").permitAll()
+=======
                     .antMatchers("/", "/registration").permitAll()
+>>>>>>> 04c35d2e6fe6d1d222c5d55a2d02bb225d3d7e60
                     .anyRequest().authenticated()
                 .and()
                     .formLogin()
@@ -31,6 +50,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
 
+<<<<<<< HEAD
+    @Bean
+    @Override
+    protected UserDetailsService userDetailsService() {
+        UserDetails userDetails =
+                User.withDefaultPasswordEncoder()
+                .username("u")
+                .password("p")
+                .roles("USER")
+                .build();
+        return new InMemoryUserDetailsManager(userDetails);
+=======
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication()
@@ -40,5 +71,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authoritiesByUsernameQuery("select u.username, ur.roles from usr u inner join user_role ur on u.id = ur.user_id where u.username=?");
 
 
+>>>>>>> 04c35d2e6fe6d1d222c5d55a2d02bb225d3d7e60
     }
 }

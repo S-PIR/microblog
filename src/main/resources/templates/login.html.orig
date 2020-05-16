@@ -13,7 +13,14 @@
     <div class="row" style="margin-top: 10%">
         <div class="col-lg"></div>
         <div class="jumbotron col-lg">
+<<<<<<< HEAD
+            <h3>Please sign in</h3>
+            <div th:if="${error}" class="alert alert-danger" role="alert" th:text="#{message.login.error}">
+                Invalid user name or password!
+            </div>
+=======
             <h3>Add new user:</h3>
+>>>>>>> 04c35d2e6fe6d1d222c5d55a2d02bb225d3d7e60
 
             <form class="form-group" th:action="@{/login}" method="post">
                 <div>
@@ -24,19 +31,31 @@
                     <label for="password">Password</label>
                     <input type="password" class="form-control" id="password" name="password" placeholder="password"/>
                 </div>
+<<<<<<< HEAD
+                <p class="lead">User: username "u" password "p" and Admin: username "a" password "p"</p>
+                <div>
+                    <button type="submit" class="btn btn-primary form-control">Sing In</button>
+                </div>
+            </form>
+            <a th:href="@{/home}" th:text="#{label.form.mainLink}">main</a>
+=======
                 <div>
                     <button type="submit" class="btn btn-primary form-control">Register</button>
                 </div>
             </form>
             <a class="justify-content-center" th:href="@{/registration}" th:text="'Add new user'"></a>
+>>>>>>> 04c35d2e6fe6d1d222c5d55a2d02bb225d3d7e60
         </div>
         <div class="col-lg"></div>
     </div>
 
 
+<<<<<<< HEAD
+=======
 
 
 
+>>>>>>> 04c35d2e6fe6d1d222c5d55a2d02bb225d3d7e60
 </div>
 
 

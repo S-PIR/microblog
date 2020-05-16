@@ -40,13 +40,15 @@
     <h2>Mesage list</h2>
     <div th:each="message : ${messages}" class="list-group list-group-flush">
         <div class="list-group-item">
+<<<<<<< HEAD
+=======
             <span class="font-weight-bold" th:text="${message.id} + ' -> '">xxx</span>
+>>>>>>> 04c35d2e6fe6d1d222c5d55a2d02bb225d3d7e60
             <span class="" th:text="${message.text} + ' -> '">xxx</span>
             <span th:text="${message.tag}">xxx</span>
         </div>
     </div>
 </div>
-<p th:text="${some}" />
-<a th:href="@{/greeting?name=Serg}" th:text="greeting"></a>
+
 </body>
 </html>
