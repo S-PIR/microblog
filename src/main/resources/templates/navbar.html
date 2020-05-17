@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Navigation panel</title>
+
+</head>
+<body >
+
+<div class="" th:fragment="header">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" th:href="@{/main}">
+            <img th:src="@{/img/загружено.jpg}" style="width:50px;">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" th:href="@{/}" th:text="'Home'">Home<span class="sr-only">(current)</span></a>
+                </li>
+
+                <li class="nav-item active">
+                    <a class="nav-link" th:href="@{/main}" th:text="'Messages'">Messages<span class="sr-only">(current)</span></a>
+                </li>
+
+                <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Admins section
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" th:href="@{/user}" th:text="'User list'">Add product</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown">
+
+                </li>
+
+                <li class="nav-item active">
+                    <a href="#" class="nav-link" onclick="document.getElementById('logout-form').submit();"> Sign out<span class="sr-only">(current)</span> </a>
+                    <form id="logout-form" th:action="@{/logout}" method="post">
+                        <input type="hidden"/>
+                    </form>
+                </li>
+
+                <li class="nav-item active">
+                    <form class="input-group-append" th:action="@{/filter}">
+                        <input type="text" class="form-control" name="filter" th:placeholder="'Search by tag'">
+                        <button class="btn btn-success" type="submit" th:text="'Find'">Find</button>
+                    </form>
+                </li>
+
+
+            </ul>
+
+            <h7 sec:authorize="hasRole('ROLE_USER') && !hasRole('ROLE_ADMIN')">
+                <span th:text="|'Welcome user'&#160|">User</span>
+            </h7>
+            <h7 sec:authorize="hasRole('ROLE_ADMIN')">
+                <span th:text="|'Welcome admin'&#160|">Admin</span>
+            </h7>
+            <h7 sec:authentication="principal.username">username</h7>
+            <h7>&#33;&#160;&#160;</h7>
+
+        </div>
+
+    </nav>
+
+</div>
+<div class="" th:fragment="header-profile">
+    <div class="jumbotron text-center" style="margin-bottom: 0px">
+        <h1>CARLOS BAKERY, FEATURED ON CAKE BOSS, IS KNOWN FOR OUR DELICIOUS PASTRIES, DESSERTS & CAKES</h1>
+        <p>Carlo's is a family owned bakery featured on the TLC hit show Cake Boss. Carlo's, originally opened
+            by Carlo Guastaffero in 1910, was acquired by Bartolo Valastro Sr. in 1964. </p>
+    </div>
+    <img th:src="@{/img/загружено.jpg}" class="img-fluid">
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+</body>
+</html>

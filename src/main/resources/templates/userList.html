@@ -1,29 +1,24 @@
-<!DOCTYPE html>
-
-<html xmlns:th="http://www.thymeleaf.org" >
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <title>home</title>
+    <title>List of users</title>
 </head>
-<body style="background-color: whitesmoke">
-
-
-<div class="container mt-6">
-    <div class="jumbotron text-center " >
-        <h1 class="display-4" th:text="'Welcome to our Microblog'">Welcome!</h1>
-        <p class="lead" th:text="'To use all features of our microblog please sign in or register.'">Please sign in or register.</p>
-        <hr class="my-4">
-        <p class="lead" tyle="align-content: center">
-            <a class="btn btn-outline-primary btn-lg" th:text="'Sign in'" th:href="@{/main}" role="button">Sign in</a>
-            <a class="btn btn-outline-primary btn-lg" th:text="'Registration'" th:href="@{/registration}" role="button">Registration</a>
-        </p>
-        <div th:insert="footer::footer"/>
+<body>
+<div class="container">
+    <h2>List of users</h2>
+    <div th:each="user : ${userList}" class="list-group list-group-flush">
+        <div class="list-group-item">
+            <span class="font-weight-bold" th:text="${user.username}">xxx</span>
+            <div th:each="role : ${user.roles}">
+                <span class="" th:text="${#strings.setJoin(role, ', ')}"/>
+            </div>
+            <a th:href="@{/user/{user}(user=${user.id})}" th:text="'edit'">edit</a>
+        </div>
     </div>
-    <!--    <img th:src="@{'/img/best-whale-shark-dive-sites.jpg'}" class="img-fluid">-->
 </div>
-
 
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

@@ -13,10 +13,8 @@
     <div class="row" style="margin-top: 10%">
         <div class="col-lg"></div>
         <div class="jumbotron col-lg">
-            <h3>Please sign in</h3>
-            <div th:if="${message}" class="alert alert-danger" role="alert" th:text="${message}">
-                User exist!
-            </div>
+            <h3>Add new user</h3>
+            <div th:if="${message}" class="alert alert-danger" role="alert" th:text="'User exist!'"/>
 
             <form class="form-group" th:action="@{/registration}" method="post">
                 <div>

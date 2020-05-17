@@ -3,10 +3,7 @@ package com.example.microblog.domain;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @NoArgsConstructor
@@ -17,10 +14,22 @@ public class Message {
     private Integer id;
 
     private String text;
-    private String tag;
 
-    public Message(String text, String tag) {
+    private String tag;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+
+    private User author;
+
+    private String filename;
+
+    public Message(String text, String tag, User user) {
         this.text = text;
         this.tag = tag;
+        this.author = user;
+    }
+
+    public String getAuthorName() {
+        return  author != null? author.getUsername(): "<none>";
     }
 }
