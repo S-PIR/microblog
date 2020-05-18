@@ -15,13 +15,13 @@
 <div class="" th:fragment="header">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" th:href="@{/main}">
-            <img th:src="@{/img/загружено.jpg}" style="width:50px;">
+            <img th:src="@{/img/cake5.jpg}" style="width:50px;">
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="collapse navbar-collapse active" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
                     <a class="nav-link" th:href="@{/}" th:text="'Home'">Home<span class="sr-only">(current)</span></a>
@@ -54,7 +54,7 @@
                 </li>
 
                 <li class="nav-item active">
-                    <form class="input-group-append" th:action="@{/filter}">
+                    <form class="input-group-append" method="post" th:action="@{/filter}">
                         <input type="text" class="form-control" name="filter" th:placeholder="'Search by tag'">
                         <button class="btn btn-success" type="submit" th:text="'Find'">Find</button>
                     </form>
@@ -62,29 +62,24 @@
 
 
             </ul>
+            <div class="mx-3">
+                <h7 sec:authorize="isAuthenticated()">
+                    <span th:text="'Welcome '"></span>
+                </h7>
+                <h7 sec:authentication="principal.username">username</h7>
+                <h7>&#33;</h7>
+            </div>
 
-            <h7 sec:authorize="hasRole('ROLE_USER') && !hasRole('ROLE_ADMIN')">
-                <span th:text="|'Welcome user'&#160|">User</span>
-            </h7>
-            <h7 sec:authorize="hasRole('ROLE_ADMIN')">
-                <span th:text="|'Welcome admin'&#160|">Admin</span>
-            </h7>
-            <h7 sec:authentication="principal.username">username</h7>
-            <h7>&#33;&#160;&#160;</h7>
 
         </div>
+        <form action="/logout" class="form-inline my-3">
+            <button type="submit" value="Sign Out" th:text="'Sign Out'" class="btn btn-secondary"></button>
+        </form>
 
     </nav>
 
 </div>
-<div class="" th:fragment="header-profile">
-    <div class="jumbotron text-center" style="margin-bottom: 0px">
-        <h1>CARLOS BAKERY, FEATURED ON CAKE BOSS, IS KNOWN FOR OUR DELICIOUS PASTRIES, DESSERTS & CAKES</h1>
-        <p>Carlo's is a family owned bakery featured on the TLC hit show Cake Boss. Carlo's, originally opened
-            by Carlo Guastaffero in 1910, was acquired by Bartolo Valastro Sr. in 1964. </p>
-    </div>
-    <img th:src="@{/img/загружено.jpg}" class="img-fluid">
-</div>
+
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

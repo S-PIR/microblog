@@ -9,17 +9,16 @@
 </head>
 <body>
 <div th:insert="navbar::header"/>
+
 <div class="container">
     <div>
-        <form action="/logout" class="form-inline my-3">
-            <button type="submit" value="Sign Out" th:text="'Sign Out'" class="btn btn-primary"></button>
-        </form>
+
         <span>
             <a th:href="@{/user}" th:text="'List of users'"/>
         </span>
     </div>
     <div>
-        <form method="post" enctype="multipart/form-data" class="form-inline my-3">
+        <form method="post" action="/main" enctype="multipart/form-data" class="form-inline my-3">
             <div class="form-group ">
                 <input type="text"name="text" placeholder="Input text" class="form-control">
             </div>
@@ -34,24 +33,13 @@
             </div>
         </form>
     </div>
-    <div>
-        <form method="post" action="filter" class="form-inline my-3">
-            <div class="form-group">
-                <input type="text" name="filter" placeholder="filter" class="form-control">
-            </div>
-            <div>
-                <button type="submit" value="Submit" th:text="find" class="btn btn-primary"></button>
-            </div>
-        </form>
-    </div>
 
     <h2>Mesage list</h2>
     <div th:each="message : ${messages}" class="list-group list-group-flush">
         <div class="list-group-item">
-            <span class="font-weight-bold" th:text="${message.id}">xxx</span>
-            <span class="" th:text="${message.text}">xxx</span>
-            <span th:text="${message.tag}">xxx</span>
-            <strong th:text="${message.authorName}"></strong>
+            <span class="" th:text="${message.text}">text</span>
+            <span th:text="${message.tag}">tag</span>
+            <strong th:text="${message.authorName}">name</strong>
             <div th:if="${message.filename}">
                 <img th:src="@{'/img/' + ${message.filename}}">
             </div>

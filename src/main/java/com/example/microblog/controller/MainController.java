@@ -54,14 +54,15 @@ public class MainController {
             file.transferTo(new File(uploadPath + "/" + resultFileName));
             message.setFilename(resultFileName);
         }
-        messageRepo.save(message);
+        if (!text.isEmpty() || !tag.isEmpty() || message.getFilename()!=null) {
+            messageRepo.save(message);
+        }
         Iterable<Message> messages = messageRepo.findAll();
         model.put("messages", messages);
-        System.out.println("WAF!!!"+"*"+text+"/"+tag+"*");
         return "redirect:/main";
     }
 
-    @PostMapping("filter")
+    @PostMapping("/filter")
     String filter(@RequestParam String filter, Map<String, Object> model){
         Iterable<Message> messages;
         if (filter != null && !filter.isEmpty()){
@@ -70,7 +71,7 @@ public class MainController {
             messages = messageRepo.findAll();
         }
         model.put("messages", messages);
-        return "main";
+        return "/main";
     }
 
 }
