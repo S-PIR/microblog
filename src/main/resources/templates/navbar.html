@@ -21,17 +21,17 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse active" id="navbarSupportedContent">
+        <div class="collapse navbar-collapse " id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
+                <li class="nav-item ">
                     <a class="nav-link" th:href="@{/}" th:text="'Home'">Home<span class="sr-only">(current)</span></a>
                 </li>
 
-                <li class="nav-item active">
+                <li class="nav-item ">
                     <a class="nav-link" th:href="@{/main}" th:text="'Messages'">Messages<span class="sr-only">(current)</span></a>
                 </li>
 
-                <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item dropdown">
+                <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item dropdown ">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Admins section
                     </a>
@@ -46,15 +46,15 @@
 
                 </li>
 
-                <li class="nav-item active">
+                <li class="nav-item ">
                     <a href="#" class="nav-link" onclick="document.getElementById('logout-form').submit();"> Sign out<span class="sr-only">(current)</span> </a>
                     <form id="logout-form" th:action="@{/logout}" method="post">
                         <input type="hidden"/>
                     </form>
                 </li>
 
-                <li class="nav-item active">
-                    <form class="input-group-append" method="post" th:action="@{/filter}">
+                <li class="nav-item mx-5">
+                    <form class="input-group-append" th:action="@{/filter}">
                         <input type="text" class="form-control" name="filter" th:placeholder="'Search by tag'">
                         <button class="btn btn-success" type="submit" th:text="'Find'">Find</button>
                     </form>
@@ -63,8 +63,11 @@
 
             </ul>
             <div class="mx-3">
-                <h7 sec:authorize="isAuthenticated()">
-                    <span th:text="'Welcome '"></span>
+                <h7 sec:authorize="hasRole('ROLE_USER') && !hasRole('ROLE_ADMIN')">
+                    <span th:text="'Welcome user '">User</span>
+                </h7>
+                <h7 sec:authorize="hasRole('ROLE_ADMIN')">
+                    <span th:text="'Welcome admin '"></span>
                 </h7>
                 <h7 sec:authentication="principal.username">username</h7>
                 <h7>&#33;</h7>

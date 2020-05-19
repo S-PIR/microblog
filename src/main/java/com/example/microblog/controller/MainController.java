@@ -62,7 +62,7 @@ public class MainController {
         return "redirect:/main";
     }
 
-    @PostMapping("/filter")
+    @GetMapping("/filter")
     String filter(@RequestParam String filter, Map<String, Object> model){
         Iterable<Message> messages;
         if (filter != null && !filter.isEmpty()){

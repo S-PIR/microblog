@@ -17,7 +17,8 @@
             <div th:if="${error}" class="alert alert-danger" role="alert" th:text="'Invalid user name or password!'">
                 Invalid user name or password!
             </div>
-
+            <div th:if="${message}" class="alert alert-danger" role="alert" th:text="${message}"/>
+            <div th:if="${success}" class="alert alert-success" role="alert" th:text="${success}"/>
             <form class="form-group" th:action="@{/login}" method="post">
                 <div>
                     <label for="username">User Name</label>

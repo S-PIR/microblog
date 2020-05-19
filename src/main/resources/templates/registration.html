@@ -14,7 +14,7 @@
         <div class="col-lg"></div>
         <div class="jumbotron col-lg">
             <h3>Add new user</h3>
-            <div th:if="${message}" class="alert alert-danger" role="alert" th:text="'User exist!'"/>
+            <div th:if="${message}" class="alert alert-danger" role="alert"><h5 th:text="${message}"></h5></div>
 
             <form class="form-group" th:action="@{/registration}" method="post">
                 <div>
@@ -26,7 +26,11 @@
                     <input type="password" class="form-control" id="password" name="password" placeholder="password"/>
                 </div>
                 <div>
-                    <button type="submit" class="btn btn-primary form-control">Register</button>
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="myemail@mail.com"/>
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-primary form-control my-2">Register</button>
                 </div>
             </form>
             <a th:href="@{/}" th:text="'home'">main</a>
