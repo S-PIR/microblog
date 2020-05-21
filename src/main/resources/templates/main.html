@@ -14,22 +14,30 @@
 
     <p class="my-3">
         <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-            Link with href
+            Add new message
         </a>
     </p>
-    <div class="collapse" id="collapseExample">
+    <div th:class="'collapse ' + (${message}?'show')" id="collapseExample">
         <form method="post" action="/main" enctype="multipart/form-data" >
             <div class="">
-                <div class="form-group mr-1">
-                    <input type="text"name="text" placeholder="Input text" class="form-control">
+                <div class="form-group mb-1">
+                    <input  type="text" name="text" th:value="${message}?${message.text}" placeholder="Input message" th:class="(${textError}? 'is-invalid') + ' form-control'">
+                    <div class="invalid-feedback" th:text="${textError}"/>
                 </div>
-                <div class="form-group mr-1">
-                    <input type="text" name="tag" placeholder="Tag" class="form-control">
+                <div class="form-group mb-1">
+                    <input type="text" name="tag" th:value="${message}?${message.tag}" placeholder="Tag" th:class="(${tagError}? 'is-invalid') + ' form-control'">
+                    <div class="invalid-feedback" th:text="${tagError}"/>
                 </div>
-                <div class="form-group mr-1">
-                    <input type="file" name="file" placeholder="path" class="form-control-file">
+<!--                <div class="form-group mb-1">-->
+<!--                    <input type="file" name="file" placeholder="path" class="form-control-file">-->
+<!--                </div>-->
+                <div class="input-group mb-1">
+                    <div class="custom-file">
+                        <input type="file" name="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
+                        <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                    </div>
                 </div>
-                <div class="form-group mr-1">
+                <div class="form-group mb-1">
                     <button type="submit" value="Submit" th:text="Submit" class="btn btn-primary"></button>
                 </div>
             </div>

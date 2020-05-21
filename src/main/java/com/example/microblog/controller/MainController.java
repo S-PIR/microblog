@@ -6,11 +6,14 @@ import com.example.microblog.repos.MessageRepo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
@@ -41,25 +44,36 @@ public class MainController {
 
     @PostMapping("/main")
     String add(@AuthenticationPrincipal User user,
-               @RequestParam String text,
-               @RequestParam String tag, Map<String, Object> model,
+               @Valid Message message,
+               BindingResult bindingResult,
+               Model model,
                @RequestParam("file")MultipartFile file) throws IOException {
-        Message message = new Message(text, tag, user);
-        if (file != null && !file.getOriginalFilename().isEmpty()) {
-            File uploadDir = new File(uploadPath);
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
+        message.setAuthor(user);
+
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errorsMap = ControllerUtils.getErrors(bindingResult);
+            for(Map.Entry entry : errorsMap.entrySet()) {
+                System.out.println(entry.getKey() + "=" + entry.getValue());
             }
-            String resultFileName = file.getOriginalFilename();
-            file.transferTo(new File(uploadPath + "/" + resultFileName));
-            message.setFilename(resultFileName);
-        }
-        if (!text.isEmpty() || !tag.isEmpty() || message.getFilename()!=null) {
+            model.mergeAttributes(errorsMap);
+            model.addAttribute("message", message);
+        } else {
+            if (file != null && !file.getOriginalFilename().isEmpty()) {
+                File uploadDir = new File(uploadPath);
+                if (!uploadDir.exists()) {
+                    uploadDir.mkdir();
+                }
+                String resultFileName = file.getOriginalFilename();
+                file.transferTo(new File(uploadPath + "/" + resultFileName));
+                message.setFilename(resultFileName);
+            }
+            model.addAttribute("message", null);
             messageRepo.save(message);
         }
+
         Iterable<Message> messages = messageRepo.findAll();
-        model.put("messages", messages);
-        return "redirect:/main";
+        model.addAttribute("messages", messages);
+        return "/main";
     }
 
     @GetMapping("/filter")

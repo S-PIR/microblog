@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <title>login form</title>
+    <title>profile form</title>
 
 </head>
 <body>
@@ -13,24 +13,24 @@
     <div class="row my-5">
         <div class="col-lg"></div>
         <div class="jumbotron col-lg">
-            <h3>Please sign in</h3>
+            <h3 th:text="'Change your password or email:'"></h3>
+            <h3 th:text="${username}"></h3>
             <div th:if="${error}" class="alert alert-danger" role="alert" th:text="'Invalid user name or password!'"/>
             <div th:if="${message}" class="alert alert-danger" role="alert" th:text="${message}"/>
             <div th:if="${success}" class="alert alert-success" role="alert" th:text="${success}"/>
-            <form class="form-group" th:action="@{/login}" method="post">
-                <div>
-                    <label for="username">User Name</label>
-                    <input type="text" class="form-control" id="username" name="username" placeholder="User Name"/>
-                </div>
+            <form class="form-group" method="post">
                 <div>
                     <label for="password">Password</label>
                     <input type="password" class="form-control" id="password" name="password" placeholder="password"/>
                 </div>
+                <div>
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="myemail@mail.com" th:value="${email}?''"/>
+                </div>
                 <div class="my-3">
-                    <button type="submit" class="btn btn-primary form-control" th:text="'Log in'"></button>
+                    <button type="submit" class="btn btn-primary form-control" th:text="'Save'"></button>
                 </div>
             </form>
-            <a class="justify-content-center" th:href="@{/registration}" th:text="'Add new user'"></a>
         </div>
         <div class="col-lg"></div>
     </div>
