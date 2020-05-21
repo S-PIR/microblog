@@ -7,7 +7,6 @@ public enum Role implements GrantedAuthority {
 
     @Override
     public String getAuthority() {
-        System.out.println(name());
         return name();
     }
 }
