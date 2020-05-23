@@ -5,12 +5,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <title>registration form</title>
 
 </head>
 <body>
 <div class="container">
-    <div class="row" style="margin-top: 10%">
+    <div class="row" style="margin-top: 3%">
         <div class="col-lg"></div>
         <div class="jumbotron col-lg">
             <h3>Add new user</h3>
@@ -19,15 +20,36 @@
             <form class="form-group" th:action="@{/registration}" method="post">
                 <div>
                     <label for="username">User Name</label>
-                    <input type="text" class="form-control" id="username" name="username" placeholder="User Name"/>
+                    <input type="text" id="username" name="username" th:value="${user}?${user.username}"
+                           th:class="(${usernameError}? 'is-invalid') + ' form-control'"
+                           placeholder="User Name"/>
+                    <div class="invalid-feedback" th:text="${usernameError}"/>
                 </div>
+
                 <div class="my-3">
                     <label for="password">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="password"/>
+                    <input type="password" id="password" name="password"
+                           th:class="(${passwordError}? 'is-invalid') + ' form-control'"
+                           placeholder="password"/>
+                    <div class="invalid-feedback" th:text="${passwordError}"/>
                 </div>
-                <div>
+                <div class="my-3">
+                    <label for="password2">Password</label>
+                    <input type="password" id="password2" name="password2"
+                           th:class="(${password2Error}? 'is-invalid') + ' form-control'"
+                           placeholder="repeat password"/>
+                    <div class="invalid-feedback" th:text="${password2Error}"/>
+                </div>
+                <div class="my-3">
                     <label for="email">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="myemail@mail.com"/>
+                    <input type="email" id="email" name="email" th:value="${user}?${user.email}"
+                           th:class="(${emailError}? 'is-invalid') + ' form-control'"
+                           placeholder="myemail@mail.com"/>
+                    <div class="invalid-feedback" th:text="${emailError}"/>
+                </div>
+                <div class="col-sm-6 my-3">
+                    <div class="g-recaptcha" data-sitekey="6Lc3UvsUAAAAABePG84GLOxKwezR5-arJ4jAGd_i"></div>
+                    <div th:if="${captchaError}" th:class="'alert alert-' + ${messageType}" role="alert" th:text="${captchaError}"></div>
                 </div>
                 <div>
                     <button type="submit" class="btn btn-primary form-control my-2">Register</button>

@@ -3,6 +3,7 @@ package com.example.microblog.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 @Controller
@@ -17,6 +18,11 @@ public class LoginController {
     public String loginError(Model model){
         model.addAttribute("error", "true");
         return "login";
+    }
+
+    @PostMapping("/postLogin")
+    public String main(){
+        return "redirect:/main";
     }
 
 }
