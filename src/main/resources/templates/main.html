@@ -12,55 +12,67 @@
 
 <div class="container">
 
-    <p class="my-3">
-        <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-            Add new message
-        </a>
-    </p>
-    <div th:class="'collapse ' + (${message}?'show')" id="collapseExample">
-        <form method="post" action="/main" enctype="multipart/form-data" >
-            <div class="">
-                <div class="form-group mb-1">
-                    <input  type="text" name="text" th:value="${message}?${message.text}" placeholder="Input message"
-                            th:class="(${textError}? 'is-invalid') + ' form-control'">
-                    <div class="invalid-feedback" th:text="${textError}"/>
-                </div>
-                <div class="form-group mb-1">
-                    <input type="text" name="tag" th:value="${message}?${message.tag}" placeholder="Tag"
-                           th:class="(${tagError}? 'is-invalid') + ' form-control'">
-                    <div class="invalid-feedback" th:text="${tagError}"/>
-                </div>
-                <div class="input-group mb-1">
-                    <div class="custom-file">
-                        <input type="file" name="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
-                        <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+    <div th:fragment="messageEdit">
+        <p class="my-3">
+            <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                Edit message
+            </a>
+        </p>
+        <div th:class="'collapse ' + (${message}?'show')" id="collapseExample">
+            <form method="post" action="/main" enctype="multipart/form-data" >
+                <div class="">
+                    <div class="form-group mb-1">
+                        <input  type="text" name="text" th:value="${message}?${message.text}" placeholder="Input message"
+                                th:class="(${textError}? 'is-invalid') + ' form-control'">
+                        <div class="invalid-feedback" th:text="${textError}"/>
+                    </div>
+                    <div class="form-group mb-1">
+                        <input type="text" name="tag" th:value="${message}?${message.tag}" placeholder="Tag"
+                               th:class="(${tagError}? 'is-invalid') + ' form-control'">
+                        <div class="invalid-feedback" th:text="${tagError}"/>
+                    </div>
+                    <div class="input-group mb-1">
+                        <div class="custom-file">
+                            <input type="file" name="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
+                            <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                        </div>
+                    </div>
+                    <input type="hidden" name="id" th:value="${message}?${message.id}">
+                    <div class="form-group mb-1">
+                        <button type="submit" value="Submit" th:text="'Save message'" class="btn btn-primary"></button>
                     </div>
                 </div>
-                <div class="form-group mb-1">
-                    <button type="submit" value="Submit" th:text="Submit" class="btn btn-primary"></button>
-                </div>
-            </div>
 
-        </form>
-    </div>
-
-    <h2>Mesage list</h2>
-    <div class="card-deck">
-        <div th:each="message : ${messages}" >
-            <div class="card my-3">
-                <div th:if="${message.filename}">
-                    <img th:src="@{'/img/' + ${message.filename}}" class="card-img-top">
-                </div>
-                <div class="m-2">
-                    <span class="" th:text="${message.text}">text</span>
-                    <span th:text="${message.tag}">tag</span>
-                </div>
-                <strong th:text="${message.authorName}" class="card-footer text-muted">name</strong>
-            </div>
-
+            </form>
         </div>
 
     </div>
+
+    <div th:fragment="messageList">
+        <h2>Mesage list</h2>
+        <div class="card-deck">
+            <div th:each="message : ${messages}" >
+                <div class="card my-3">
+                    <div th:if="${message.filename}">
+                        <img th:src="@{'/img/' + ${message.filename}}" class="card-img-top">
+                    </div>
+                    <div class="m-2">
+                        <span class="" th:text="${message.text}">text</span><br>
+                        <i th:text="'#' + ${message.tag}">tag</i>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <a th:href="@{user-messages/{username}(username=${message.authorName})}"
+                           th:text="${message.authorName}"></a>
+                        <a class="btn btn-primary" th:if="${message.authorName} == ${#authentication.name}"
+                           th:href="@{/user-messages/{username}?message={messageId}(username=${message.authorName}, messageId=${message.id})}"
+                           th:text="'Edit'"></a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <div th:insert="footer::footer"/>

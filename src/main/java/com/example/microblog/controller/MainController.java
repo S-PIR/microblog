@@ -76,6 +76,8 @@ public class MainController {
         return "/main";
     }
 
+
+
     @GetMapping("/filter")
     String filter(@RequestParam String filter, Map<String, Object> model){
         Iterable<Message> messages;

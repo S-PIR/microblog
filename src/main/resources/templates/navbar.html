@@ -23,11 +23,11 @@
         <div class="collapse navbar-collapse " id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item ">
-                    <a class="nav-link" th:href="@{/}" th:text="'Home'">Home<span class="sr-only">(current)</span></a>
+                    <a class="nav-link" th:href="@{/}" th:text="'Home'">Home</a>
                 </li>
 
                 <li class="nav-item ">
-                    <a class="nav-link" th:href="@{/main}" th:text="'Messages'">Messages<span class="sr-only">(current)</span></a>
+                    <a class="nav-link" th:href="@{/main}" th:text="'Messages'">Messages</a>
                 </li>
 
                 <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item dropdown ">
@@ -45,12 +45,8 @@
                     <a class="nav-link" th:href="@{/user/profile}" th:text="'Edit profile'" ></a>
                 </li>
 
-
-                <li class="nav-item ">
-                    <a href="#" class="nav-link" onclick="document.getElementById('logout-form').submit();"> Sign out<span class="sr-only">(current)</span> </a>
-                    <form id="logout-form" th:action="@{/logout}" method="post">
-                        <input type="hidden"/>
-                    </form>
+                <li sec:authorize="isAuthenticated()" class="nav-item">
+                    <a class="nav-link" th:href="@{/user-messages/{username}(username=${#authentication.name})}" th:text="'My messages'" ></a>
                 </li>
 
                 <li class="nav-item mx-5">
@@ -74,11 +70,14 @@
             </div>
 
 
-        </div>
-        <form action="/logout" class="form-inline my-3">
-            <button type="submit" value="Sign Out" th:text="'Sign Out'" class="btn btn-secondary"></button>
-        </form>
+            <li class="nav-item ">
+                <a href="#" class="nav-link" onclick="document.getElementById('logout-form').submit();"> Sign out<span class="sr-only">(current)</span> </a>
+                <form id="logout-form" th:action="@{/logout}" method="post">
+                    <input type="hidden"/>
+                </form>
+            </li>
 
+         </div>
     </nav>
 
 </div>
