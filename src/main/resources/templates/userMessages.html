@@ -13,7 +13,53 @@
 <body>
 <div th:insert="navbar::header"/>
 
-<div class="container">
+
+
+<div class="container my-3">
+    <div th:if="${not isCurrentUser}">
+        <div th:if="${isSubscriber}">
+            <a class="btn btn-info" th:href="@{/user/unsubscribe/{userChannelId}(userChannelId=${userChannel.id})}"
+               th:text="'Unsubscribe'">
+
+            </a>
+        </div>
+        <div th:if="${not isSubscriber}">
+            <a class="btn btn-info" th:href="@{/user/subscribe/{userChannelId}(userChannelId=${userChannel.id})}"
+               th:text="'Subscribe'">
+            </a>
+        </div>
+    </div>
+</div>
+<div class="container my-3">
+    <h3 th:text="${userChannel.username}"></h3>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card body">
+                        <div class="card-title" th:text="'Subscriptions'"></div>
+                        <h3 class="card-text" >
+                            <a th:href="@{/user/subscriptions/{userChannelId}/list(userChannelId=${userChannel.id})}"
+                               th:text="${subscriptionsCount}">
+                            </a>
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card body">
+                        <div class="card-title" th:text="'Subscribers'"></div>
+                        <h3 class="card-text">
+                            <a th:href="@{/user/subscribers/{userChannelId}/list(userChannelId=${userChannel.id})}"
+                               th:text="${subscribersCount}">
+                            </a>
+                        </h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div th:if="'isCurrentUser'" th:insert="main::messageEdit"/>
 
     <div th:include="main::messageList"/>

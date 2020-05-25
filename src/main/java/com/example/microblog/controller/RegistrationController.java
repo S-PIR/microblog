@@ -33,7 +33,7 @@ public class RegistrationController {
     String secret;
 
     @GetMapping("/registration")
-    String registration(){
+    String registration() {
         return "registration";
     }
 
@@ -43,7 +43,7 @@ public class RegistrationController {
                    @Valid User user,
                    BindingResult bindingResult,
                    Model model,
-                   RedirectAttributes redirectAttributes){
+                   RedirectAttributes redirectAttributes) {
 
         String url = String.format(CAPTCHA_URL, secret, captchaResponse);
         CaptchaResponseDto response = restTemplate.postForObject(url, Collections.emptyList(), CaptchaResponseDto.class);
@@ -62,7 +62,7 @@ public class RegistrationController {
             model.addAttribute("passwordError", "Passwords are different!");
         }
 
-        if (isConfirmEmpty ||bindingResult.hasErrors() || !response.isSuccess()) {
+        if (isConfirmEmpty || bindingResult.hasErrors() || !response.isSuccess()) {
 
             Map<String, String> errors = ControllerUtils.getErrors(bindingResult);
             model.mergeAttributes(errors);
@@ -89,4 +89,5 @@ public class RegistrationController {
         }
         return "login";
     }
+
 }

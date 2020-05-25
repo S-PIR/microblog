@@ -61,10 +61,10 @@
                         <i th:text="'#' + ${message.tag}">tag</i>
                     </div>
                     <div class="card-footer text-muted">
-                        <a th:href="@{user-messages/{username}(username=${message.authorName})}"
+                        <a th:href="@{/user-messages/{authorId}(authorId=${message.author.id})}"
                            th:text="${message.authorName}"></a>
                         <a class="btn btn-primary" th:if="${message.authorName} == ${#authentication.name}"
-                           th:href="@{/user-messages/{username}?message={messageId}(username=${message.authorName}, messageId=${message.id})}"
+                           th:href="@{/user-messages/{authorId}?message={messageId}(authorId=${message.author.id}, messageId=${message.id})}"
                            th:text="'Edit'"></a>
                     </div>
                 </div>
