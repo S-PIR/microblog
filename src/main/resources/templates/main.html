@@ -1,10 +1,10 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" >
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="/static/style.css">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+    <link rel="stylesheet" href="/static/style.css" />
     <title>main</title>
 </head>
 <body>
@@ -50,9 +50,9 @@
 
     <div th:fragment="messageList">
         <h2>Mesage list</h2>
-        <div class="card-deck">
+        <div class="card-deck" id="message-list">
             <div th:each="message : ${messages}" >
-                <div class="card my-3">
+                <div class="card my-3" th:data-id="${message.id}">
                     <div th:if="${message.filename}">
                         <img th:src="@{'/img/' + ${message.filename}}" class="card-img-top">
                     </div>

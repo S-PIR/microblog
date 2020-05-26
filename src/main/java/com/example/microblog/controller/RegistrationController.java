@@ -73,7 +73,8 @@ public class RegistrationController {
             model.addAttribute("usernameError", "User exists!");
             return "registration";
         }
-        redirectAttributes.addFlashAttribute("success", "Verify your email, please.");
+        redirectAttributes.addFlashAttribute("message", "Verify your email, please.");
+        redirectAttributes.addFlashAttribute("messageType", "success");
         return "redirect:/login";
     }
 

@@ -1,7 +1,6 @@
 package com.example.microblog;
 
 import com.example.microblog.controller.MessageController;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -28,7 +28,7 @@ public class LoginTest {
     private MessageController controller;
 
     @Test
-    public void test() throws Exception{
+    public void contextLoads() throws Exception{
         this.mockMvc.perform(get("/"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -38,7 +38,7 @@ public class LoginTest {
     }
 
     @Test
-    public void loginTest() throws Exception{
+    public void accessDeniedTest() throws Exception{
         this.mockMvc.perform(get("/main"))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
@@ -48,9 +48,21 @@ public class LoginTest {
 
     @Test
     public void correctLoginTest() throws Exception{
-        this.mockMvc.perform(formLogin());
-sout
+        this.mockMvc.perform(formLogin().user("g").password("g"))
+                .andDo(print())
+                .andExpect(status().isOk());
 
     }
+
+    @Test
+    public void badCredentialsTest() throws Exception{
+        this.mockMvc.perform(post("/login").param("user", "Alex"))
+                .andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/loginFailed"));
+
+    }
+
+
 
 }
