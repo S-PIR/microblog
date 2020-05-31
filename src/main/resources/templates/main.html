@@ -49,6 +49,8 @@
     </div>
 
     <div th:fragment="messageList">
+        <div th:insert="main::pager"/>
+
         <h2>Mesage list</h2>
         <div class="card-deck" id="message-list">
             <div th:each="message : ${messages}" >
@@ -63,15 +65,46 @@
                     <div class="card-footer text-muted">
                         <a th:href="@{/user-messages/{authorId}(authorId=${message.author.id})}"
                            th:text="${message.authorName}"></a>
-                        <a class="btn btn-primary" th:if="${message.authorName} == ${#authentication.name}"
+                        <a class="btn btn-primary mx-3" th:if="${message.authorName} == ${#authentication.name}"
                            th:href="@{/user-messages/{authorId}?message={messageId}(authorId=${message.author.id}, messageId=${message.id})}"
                            th:text="'Edit'"></a>
+                        <p class="text-muted font-italic small mt-3" th:text="${message.date}"></p>
                     </div>
                 </div>
 
             </div>
         </div>
+        <div class="" th:fragment="pager">
+            <div class="d-flex justify-content-center mt-3">
+                <ul class="pagination">
+                    <li th:class="'page-item ' + (${not messages.getPageable().hasPrevious()} ? 'disabled')">
+                        <a class="page-link"
+                           th:href="@{__${url}__?page={page}&size={size}(page=${messages.getNumber()}-1, size=${messages.getSize()}, userId=${userChannel.id})}">Previous</a>
+                    </li>
+                    <li th:each="page : ${pages}" th:class="'page-item ' + (${messages.getNumber()} == ${page} ? 'active')">
+                        <a class="page-link active" th:href="@{__${url}__?page={page}&size={size}(page=${page}, size=${messages.getSize()}, userId=${userChannel.id})}" th:text="${page + 1}">page</a>
+                    </li>
+                    <li th:class="'page-item ' + (${messages.getNumber()} ge ${pages.length - 1} ? 'disabled')">
+                        <a class="page-link" th:href="@{__${url}__?page={page}&size={size}(page=${messages.getNumber()}+1, size=${messages.getSize()}, userId=${userChannel.id})}">Next</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="d-flex justify-content-center">
+                <ul class="pagination pagination-sm">
+                    <li th:class="'page-item disabled'">
+                        <a class="page-link" href="#" th:text="'Messages on page'">Messages on page</a>
+                    </li>
+                    <li th:each="size : ${pageSizes}" th:class="'page-item ' + (${messages.getSize()} == ${size} ? 'active')">
+                        <a th:class="'page-link active'"
+                           th:href="@{__${url}__?size={size}(size=${size}, userId=${userChannel.id})}"
+                           th:text="${size}">pageSize</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
+
+
 
 </div>
 

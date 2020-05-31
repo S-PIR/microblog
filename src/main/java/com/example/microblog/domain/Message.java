@@ -6,6 +6,11 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.Locale;
 
 @Data
 @NoArgsConstructor
@@ -28,13 +33,22 @@ public class Message {
 
     private String filename;
 
+    @Column(name = "timestamp")
+    private LocalDateTime date;
+
     public Message(String text, String tag, User user) {
         this.text = text;
         this.tag = tag;
         this.author = user;
+        this.date = LocalDateTime.now();
     }
 
     public String getAuthorName() {
         return  author != null? author.getUsername(): "<none>";
     }
+
+    public String getDate() {
+        return date != null ? date.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withLocale(Locale.UK)) : "<none>";
+    }
+
 }

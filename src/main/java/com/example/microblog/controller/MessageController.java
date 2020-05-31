@@ -7,22 +7,33 @@ import com.example.microblog.repos.UserRepo;
 import com.example.microblog.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.Set;
+import java.util.stream.IntStream;
 
 @Controller
 public class MessageController {
+    private static final Integer[] PAGE_SIZES = {5, 10, 25, 50, 100};
+    private static final User EMPTY_USER = new User();
+
     @Value("${upload.path}")
     private String uploadPath;
 
@@ -41,20 +52,35 @@ public class MessageController {
     }
 
     @GetMapping("/main")
-    String main(Map<String, Object> model){
-        Iterable<Message> messages = messageRepo.findAll();
-        model.put("messages", messages);
+    String main(@RequestParam(required = false, defaultValue = "") String filter,
+                Map<String, Object> model,
+                @PageableDefault(sort = {"date"}, direction = Sort.Direction.DESC)Pageable pageable){
+        Page<Message> page;
+        if (filter != null && !filter.isEmpty()) {
+            page = messageRepo.findByTag(filter, pageable);
+        } else {
+            page = messageRepo.findAll(pageable);
+        }
+        model.put("pages", IntStream.range(0, page.getTotalPages()).toArray());
+        model.put("messages", page);
+        model.put("filter", filter);
+        model.put("pageSizes", PAGE_SIZES);
+        model.put("url", "/main");
+        model.put("userChannel", EMPTY_USER);
         return "main";
     }
+
 
     @PostMapping("/main")
     String add(@AuthenticationPrincipal User user,
                @Valid Message message,
                BindingResult bindingResult,
                Model model,
-               @RequestParam("file")MultipartFile file) throws IOException {
-        message.setAuthor(user);
+               @RequestParam("file")MultipartFile file,
+               @PageableDefault(sort = {"date"}, direction = Sort.Direction.DESC)Pageable pageable) throws IOException {
 
+        message.setAuthor(user);
+        message.setDate(LocalDateTime.now());
         if (bindingResult.hasErrors()) {
             Map<String, String> errorsMap = ControllerUtils.getErrors(bindingResult);
             model.mergeAttributes(errorsMap);
@@ -65,9 +91,11 @@ public class MessageController {
             messageRepo.save(message);
         }
 
-
-        Iterable<Message> messages = messageRepo.findAll();
-        model.addAttribute("messages", messages);
+        Page<Message> page = messageRepo.findAll(pageable);
+        model.addAttribute("messages", page);
+        model.addAttribute("pages", IntStream.range(0, page.getTotalPages()).toArray());
+        model.addAttribute("url", "/main");
+        model.addAttribute("userChannel", EMPTY_USER);
         return "main";
     }
 
@@ -83,34 +111,28 @@ public class MessageController {
         }
     }
 
-    @GetMapping("/filter")
-    String filter(@RequestParam String filter, Map<String, Object> model){
-        Iterable<Message> messages;
-        if (filter != null && !filter.isEmpty()){
-            messages = messageRepo.findByTag(filter);
-        } else {
-            messages = messageRepo.findAll();
-        }
-        model.put("messages", messages);
-        return "main";
-    }
-
     @GetMapping("/user-messages/{user}")
     public String userMessages(
             @AuthenticationPrincipal User currentUser,
             @PathVariable User user,
             @RequestParam(required = false) Message message,
+            @PageableDefault(sort = {"date"}, direction = Sort.Direction.DESC)Pageable pageable,
             Model model) {
 
-        Set<Message> messages = user.getMessages();
-        System.out.println("checkpoint");
+//        Set<Message> messages = user.getMessages();
+        Page<Message> page = messageRepo.findByAuthor_Id(user.getId(), pageable);
+        model.addAttribute("pages", IntStream.range(0, page.getTotalPages()).toArray());
+
+        model.addAttribute("pageSizes", PAGE_SIZES);
+        System.out.println(IntStream.range(0, page.getTotalPages()).toArray().length);
         model.addAttribute("userChannel", user);
         model.addAttribute("subscriptionsCount", user.getSubscriptions().size());
         model.addAttribute("subscribersCount", user.getSubscribers().size());
         model.addAttribute("isSubscriber", user.getSubscribers().contains(currentUser));
-        model.addAttribute("messages", messages);
+        model.addAttribute("messages", page);
         model.addAttribute("message", message);
         model.addAttribute("isCurrentUser", currentUser.equals(user));
+        model.addAttribute("url", "/user-messages/{userId}");
         return "userMessages";
     }
 
@@ -135,8 +157,5 @@ public class MessageController {
         }
         return "redirect:/user-messages/" + userId;
     }
-
-
-
 
 }
