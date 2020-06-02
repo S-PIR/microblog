@@ -1,16 +1,15 @@
 package com.example.microblog.domain;
 
+import com.example.microblog.domain.util.MessageHelper;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.Locale;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -36,6 +35,14 @@ public class Message {
     @Column(name = "timestamp")
     private LocalDateTime date;
 
+    @ManyToMany
+    @JoinTable(
+            name = "message_likes",
+            joinColumns = { @JoinColumn(name = "message_id") },
+            inverseJoinColumns = { @JoinColumn(name = "user_id") }
+    )
+    private Set<User> likes = new HashSet<>();
+
     public Message(String text, String tag, User user) {
         this.text = text;
         this.tag = tag;
@@ -44,11 +51,11 @@ public class Message {
     }
 
     public String getAuthorName() {
-        return  author != null? author.getUsername(): "<none>";
+        return MessageHelper.getAuthorName(author);
     }
 
-    public String getDate() {
-        return date != null ? date.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withLocale(Locale.UK)) : "<none>";
+    public String printDate() {
+        return MessageHelper.printDate(date);
     }
 
 }

@@ -5,7 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
     <link rel="stylesheet" href="/static/style.css" />
+    <script src="https://kit.fontawesome.com/04388702fc.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/turbolinks/5.2.0/turbolinks.js"></script>
+    <script defer src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <style>
+        .turbolinks-progress-bar {
+            height: 5px;
+            background-color: navy;
+        }
+    </style>
     <title>main</title>
+
 </head>
 <body>
 <div th:insert="navbar::header"/>
@@ -23,12 +34,12 @@
                 <div class="">
                     <div class="form-group mb-1">
                         <input  type="text" name="text" th:value="${message}?${message.text}" placeholder="Input message"
-                                th:class="(${textError}? 'is-invalid') + ' form-control'">
+                        th:class="(${textError}? 'is-invalid') + ' form-control'">
                         <div class="invalid-feedback" th:text="${textError}"/>
                     </div>
                     <div class="form-group mb-1">
                         <input type="text" name="tag" th:value="${message}?${message.tag}" placeholder="Tag"
-                               th:class="(${tagError}? 'is-invalid') + ' form-control'">
+                        th:class="(${tagError}? 'is-invalid') + ' form-control'">
                         <div class="invalid-feedback" th:text="${tagError}"/>
                     </div>
                     <div class="input-group mb-1">
@@ -62,24 +73,32 @@
                         <span class="" th:text="${message.text}">text</span><br>
                         <i th:text="'#' + ${message.tag}">tag</i>
                     </div>
-                    <div class="card-footer text-muted">
-                        <a th:href="@{/user-messages/{authorId}(authorId=${message.author.id})}"
-                           th:text="${message.authorName}"></a>
-                        <a class="btn btn-primary mx-3" th:if="${message.authorName} == ${#authentication.name}"
-                           th:href="@{/user-messages/{authorId}?message={messageId}(authorId=${message.author.id}, messageId=${message.id})}"
-                           th:text="'Edit'"></a>
+                    <div class="container card-footer text-muted">
+                        <div class="row justify-content-center">
+                            <a class="col" th:href="@{/user-messages/{authorId}(authorId=${message.author.id})}"
+                            th:text="${message.authorName}"></a>
+                            <a class="col" th:href="@{/messages/{messageId}/like(messageId=${message.id})}">
+                                <!--                               th:text="${message.likes}"-->
+                                <i th:if="${message.meLiked}" class="fas fa-heart"><span th:text="${message.likes}"/></i>
+                                <i th:unless="${message.meLiked}" class="far fa-heart"><span th:text="${message.likes}"/></i>
+                            </a>
+                            <a class="col btn btn-primary mx-3" th:if="${message.authorName} == ${#authentication.name}"
+                            th:href="@{/user-messages/{authorId}?message={messageId}(authorId=${message.author.id}, messageId=${message.id})}"
+                            th:text="'Edit'"></a>
+                        </div>
                         <p class="text-muted font-italic small mt-3" th:text="${message.date}"></p>
                     </div>
                 </div>
 
             </div>
         </div>
+
         <div class="" th:fragment="pager">
             <div class="d-flex justify-content-center mt-3">
                 <ul class="pagination">
                     <li th:class="'page-item ' + (${not messages.getPageable().hasPrevious()} ? 'disabled')">
                         <a class="page-link"
-                           th:href="@{__${url}__?page={page}&size={size}(page=${messages.getNumber()}-1, size=${messages.getSize()}, userId=${userChannel.id})}">Previous</a>
+                        th:href="@{__${url}__?page={page}&size={size}(page=${messages.getNumber()}-1, size=${messages.getSize()}, userId=${userChannel.id})}">Previous</a>
                     </li>
                     <li th:each="page : ${pages}" th:class="'page-item ' + (${messages.getNumber()} == ${page} ? 'active')">
                         <a class="page-link active" th:href="@{__${url}__?page={page}&size={size}(page=${page}, size=${messages.getSize()}, userId=${userChannel.id})}" th:text="${page + 1}">page</a>
@@ -96,8 +115,8 @@
                     </li>
                     <li th:each="size : ${pageSizes}" th:class="'page-item ' + (${messages.getSize()} == ${size} ? 'active')">
                         <a th:class="'page-link active'"
-                           th:href="@{__${url}__?size={size}(size=${size}, userId=${userChannel.id})}"
-                           th:text="${size}">pageSize</a>
+                        th:href="@{__${url}__?size={size}(size=${size}, userId=${userChannel.id})}"
+                        th:text="${size}">pageSize</a>
                     </li>
                 </ul>
             </div>
@@ -110,8 +129,6 @@
 
 <div th:insert="footer::footer"/>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 </body>
 </html>

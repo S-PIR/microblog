@@ -58,6 +58,9 @@ public class User implements UserDetails {
     )
     private Set<User> subscriptions = new HashSet<>();
 
+    @ManyToMany(mappedBy = "likes")
+    private Set<Message> likes = new HashSet<>();
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();
