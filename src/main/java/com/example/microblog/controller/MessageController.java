@@ -2,9 +2,11 @@ package com.example.microblog.controller;
 
 import com.example.microblog.domain.Message;
 import com.example.microblog.domain.User;
+import com.example.microblog.domain.dto.MessageDto;
 import com.example.microblog.repos.MessageRepo;
 import com.example.microblog.repos.UserRepo;
 import com.example.microblog.service.user.UserService;
+import com.example.microblog.service.user.message.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -46,6 +48,9 @@ public class MessageController {
     @Autowired
     MessageRepo messageRepo;
 
+    @Autowired
+    MessageService messageService;
+
     @GetMapping("/")
     String greeting(Map<String, Object> model){
         return "greeting";
@@ -54,13 +59,10 @@ public class MessageController {
     @GetMapping("/main")
     String main(@RequestParam(required = false, defaultValue = "") String filter,
                 Map<String, Object> model,
-                @PageableDefault(sort = {"date"}, direction = Sort.Direction.DESC)Pageable pageable){
-        Page<Message> page;
-        if (filter != null && !filter.isEmpty()) {
-            page = messageRepo.findByTag(filter, pageable);
-        } else {
-            page = messageRepo.findAll(pageable);
-        }
+                @PageableDefault(sort = {"date"}, direction = Sort.Direction.DESC)Pageable pageable,
+                @AuthenticationPrincipal User currentUser){
+
+        Page<MessageDto> page = messageService.messageList(filter, pageable, currentUser);
         model.put("pages", IntStream.range(0, page.getTotalPages()).toArray());
         model.put("messages", page);
         model.put("filter", filter);
@@ -111,27 +113,26 @@ public class MessageController {
         }
     }
 
-    @GetMapping("/user-messages/{user}")
+    @GetMapping("/user-messages/{author}")
     public String userMessages(
             @AuthenticationPrincipal User currentUser,
-            @PathVariable User user,
+            @PathVariable User author,
             @RequestParam(required = false) Message message,
             @PageableDefault(sort = {"date"}, direction = Sort.Direction.DESC)Pageable pageable,
             Model model) {
 
 //        Set<Message> messages = user.getMessages();
-        Page<Message> page = messageRepo.findByAuthor_Id(user.getId(), pageable);
+        Page<MessageDto> page = messageService.messageListForUser(author, pageable, currentUser);
         model.addAttribute("pages", IntStream.range(0, page.getTotalPages()).toArray());
-
         model.addAttribute("pageSizes", PAGE_SIZES);
         System.out.println(IntStream.range(0, page.getTotalPages()).toArray().length);
-        model.addAttribute("userChannel", user);
-        model.addAttribute("subscriptionsCount", user.getSubscriptions().size());
-        model.addAttribute("subscribersCount", user.getSubscribers().size());
-        model.addAttribute("isSubscriber", user.getSubscribers().contains(currentUser));
+        model.addAttribute("userChannel", author);
+        model.addAttribute("subscriptionsCount", author.getSubscriptions().size());
+        model.addAttribute("subscribersCount", author.getSubscribers().size());
+        model.addAttribute("isSubscriber", author.getSubscribers().contains(currentUser));
         model.addAttribute("messages", page);
         model.addAttribute("message", message);
-        model.addAttribute("isCurrentUser", currentUser.equals(user));
+        model.addAttribute("isCurrentUser", currentUser.equals(author));
         model.addAttribute("url", "/user-messages/{userId}");
         return "userMessages";
     }

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
     <link rel="stylesheet" href="/static/style.css" />
+    <script src="https://kit.fontawesome.com/04388702fc.js" crossorigin="anonymous"></script>
     <title>main</title>
 </head>
 <body>
@@ -62,18 +63,26 @@
                         <span class="" th:text="${message.text}">text</span><br>
                         <i th:text="'#' + ${message.tag}">tag</i>
                     </div>
-                    <div class="card-footer text-muted">
-                        <a th:href="@{/user-messages/{authorId}(authorId=${message.author.id})}"
-                           th:text="${message.authorName}"></a>
-                        <a class="btn btn-primary mx-3" th:if="${message.authorName} == ${#authentication.name}"
-                           th:href="@{/user-messages/{authorId}?message={messageId}(authorId=${message.author.id}, messageId=${message.id})}"
-                           th:text="'Edit'"></a>
+                    <div class="container card-footer text-muted">
+                        <div class="row justify-content-center">
+                            <a class="col" th:href="@{/user-messages/{authorId}(authorId=${message.author.id})}"
+                               th:text="${message.authorName}"></a>
+                            <a class="col" th:href="@{/user-messages/{authorId}(authorId=${message.author.id})}">
+<!--                               th:text="${message.likes}"-->
+                                <i class="fas fa-heart"></i>
+                                <i class="far fa-heart"></i>
+                            </a>
+                            <a class="col btn btn-primary mx-3" th:if="${message.authorName} == ${#authentication.name}"
+                               th:href="@{/user-messages/{authorId}?message={messageId}(authorId=${message.author.id}, messageId=${message.id})}"
+                               th:text="'Edit'"></a>
+                        </div>
                         <p class="text-muted font-italic small mt-3" th:text="${message.date}"></p>
                     </div>
                 </div>
 
             </div>
         </div>
+
         <div class="" th:fragment="pager">
             <div class="d-flex justify-content-center mt-3">
                 <ul class="pagination">
